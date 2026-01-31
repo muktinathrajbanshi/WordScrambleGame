@@ -4,19 +4,25 @@ const btn = document.querySelector(".btn");
 let play = false;
 let newWords = "";
 let randWords = "";
-let sWords = [
-  "planet", "developer", "mirror", "neon",
-  "matrix", "javascript", "friend", "flower"
-];
+let level = 1;
+let score = 0;
+
+const wordsByLevel = {
+  1: ["cat", "sun", "pen", "tree", "milk"],
+  2: ["planet", "friend", "window", "garden", "mirror"],
+  3: ["developer", "scramble", "javascript", "frontend"],
+  4: ["asynchronous", "authentication", "optimization"]
+};
 
 
 const createNewWords = () => {
-    let randomNum = Math.floor(Math.random() * sWords.length);
-    // console.log(randomNum);
-    let newTempSwords = sWords[randomNum];
-    // console.log(newTempSwords.split(""));
+    const levelWords = wordsByLevel[level] || wordsByLevel[4];
+    // console.log(levelWords.length);
+    const randomNum = Math.floor(Math.random() * levelWords.length);
+    // console.log(levelWords[randomNum]);
+    return levelWords[randomNum];
     
-    return newTempSwords;
+   
 }
 
 const scrambleWords = (arr) => {
