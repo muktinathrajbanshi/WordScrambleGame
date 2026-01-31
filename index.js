@@ -15,7 +15,7 @@ let score = 0;
 let timeLeft = 20;
 let timer;
 
-
+let highScore = localStorage.getItem("highScore") || 0;
 
 
 const correctSound = new Audio("./sounds/congratulations.mp3");
@@ -70,16 +70,18 @@ const createNewWords = () => {
 }
 
 const startTimer = () => {
-    timeLeft = Math.max(8, 20 - level * 3);
+    totalTime = Math.max(8, 20 - level * 3);
     timeLeft = totalTime;
 
-    timeBar.style.width = "100%";
+    if (timeBar) timeBar.style.width = "100%";
 
     timer = setInterval(() => {
         timeLeft--;
         btn.innerHTML = `Guess (${timeLeft}s)`;
 
-        timeBar.style.width = `${(timeLeft / totalTime) * 100}%`;
+        if (timeBar) {
+            timeBar.style.width = `${(timeLeft / totalTime) * 100}%`;
+        }
 
          if (timeLeft <= 0) {
             clearInterval(timer);
@@ -131,12 +133,16 @@ btn.addEventListener("click", function(){
             correctSound.play();
 
             score++;
+            if (score > highScore) {
+                highScore = score;
+                localStorage.setItem("highScore", highScore);
+            }
+
             if (score % 3 === 0) level++;
             applyTheme();
 
             play = false;
-            msg.innerHTML = `✅ Correct! Level: ${level} | Score: ${score}`;
-            msg.innerHTML = "🎉 Correct!";
+            msg.innerHTML = `🎉 Correct! High Score: ${highScore}`;
             levelEl.textContent = level;
             scoreEl.textContent = score;
             btn.innerHTML = "Start Again";
@@ -158,3 +164,9 @@ btn.addEventListener("click", function(){
 
     }
 })
+
+guess.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" && play) {
+        btn.click();
+    }
+});
