@@ -28,10 +28,10 @@ const scrambleWords = (arr) => {
         // console.log(j);
 
         arr[i] = arr[j];
-        arr[j] = temp;
-
-        return arr;          
+        arr[j] = temp;          
     }
+
+    return arr;
 }
 
 
@@ -41,6 +41,25 @@ btn.addEventListener("click", function(){
         btn.innerHTML = "Guess";
         guess.classList.toggle("hidden");
         newWords = createNewWords();
-        randWords = scrambleWords(newWords.split(""));
+        randWords = scrambleWords(newWords.split("")).join("");
+        // console.log(randWords);
+        msg.innerHTML = `Guess the Word: ${randWords}`;
+    } else {
+        let tempWord = guess.value;
+        if(tempWord === newWords) {
+            console.log("correct");
+            play = false;
+            msg.innerHTML = `Awesome It's Correct. it is ${newWords}`;
+            btn.innerHTML = "Start Again";
+            guess.classList.toggle("hidden");
+            guess.value = "";
+
+        } else {
+            console.log("incorrect");
+             msg.innerHTML = `Sorry. It's incorrect. Plz try again ${randWords}`;
+             guess.value = "";
+            
+        }
+
     }
 })
