@@ -262,21 +262,17 @@ input:focus {
   header h1 {
     font-size: 2.5rem;
   }
-
   .gameArea {
-    padding: 25px;
+    padding: 30px;
   }
-
   input {
-    font-size: 0.95rem;
-    padding: 12px 14px;
+    font-size: 1rem;
+    padding: 14px;
   }
-
   .btn {
-    padding: 12px;
-    font-size: 0.95rem;
+    font-size: 1rem;
+    padding: 14px;
   }
-
   .statusBar div {
     font-size: 0.85rem;
   }
@@ -284,29 +280,24 @@ input:focus {
 
 @media (max-width: 480px) {
   header h1 {
-    font-size: 2rem;
+    text-align: center;
   }
-
   .gameArea {
-    padding: 20px;
+    padding: 25px;
   }
-
   input {
     font-size: 0.9rem;
-    padding: 10px 12px;
+    padding: 12px;
   }
-
   .btn {
-    padding: 10px;
-    font-size: 0.9rem;
+    font-size: 0.95rem;
+    padding: 12px;
   }
-
-  .statusBar div {
-    font-size: 0.8rem;
-  }
-
   .msg {
     font-size: 0.9rem;
-    padding: 8px 6px;
+    padding: 8px;
+  }
+  .statusBar div {
+    font-size: 0.8rem;
   }
 }
