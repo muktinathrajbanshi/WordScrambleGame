@@ -9,6 +9,16 @@ let score = 0;
 let timeLeft = 20;
 let timer;
 
+
+const correctSound = new Audio(
+    "https://assets.mixkit.co/sfx/preview/mixkit-correct-answer-tone-2870.mp3"
+);
+
+const wrongSound = new Audio(
+    "https://assets.mixkit.co/sfx/preview/mixkit-wrong-answer-fail-notification-946.mp3"
+);
+
+
 const wordsByLevel = {
   1: ["cat", "sun", "pen", "tree", "milk"],
   2: ["planet", "friend", "window", "garden", "mirror"],
@@ -28,11 +38,10 @@ const createNewWords = () => {
 const startTimer = () => {
     timeLeft = Math.max(8, 20 - level * 3);
     // console.log(timeLeft);
-    msg.innerHTML = `⏱ Time Left: ${timeLeft}s | Word: ${randWords}`;
 
     timer = setInterval(() => {
         timeLeft--;
-        msg.innerHTML = `⏱ Time Left: ${timeLeft}s | Word: ${randWords}`;
+        btn.innerHTML = `Guess (${timeLeft}s)`;
 
          if (timeLeft <= 0) {
             clearInterval(timer);
@@ -64,7 +73,7 @@ btn.addEventListener("click", function(){
     if(!play) {
         play = true;
         btn.innerHTML = "Guess";
-        guess.classList.toggle("hidden");
+        guess.classList.remove("hidden");
 
         newWords = createNewWords();
         randWords = scrambleWords(newWords.split("")).join("");
@@ -74,19 +83,32 @@ btn.addEventListener("click", function(){
         startTimer();
     } else {
         let tempWord = guess.value;
-        if(tempWord === newWords) {
-            console.log("correct");
+
+        if (tempWord.toLocaleLowerCase() === newWords.toLocaleLowerCase()) {
+            // console.log("correct");
+            clearInterval(timer);
+            correctSound.play();
+
+            score++;
+            if (score % 3 === 0) level++;
+
             play = false;
-            msg.innerHTML = `Awesome It's Correct. it is ${newWords}`;
+            msg.innerHTML = `✅ Correct! Level: ${level} | Score: ${score}`;
             btn.innerHTML = "Start Again";
-            guess.classList.toggle("hidden");
+            guess.classList.add("hidden");
             guess.value = "";
 
         } else {
-            console.log("incorrect");
-             msg.innerHTML = `Sorry. It's incorrect. Plz try again ${randWords}`;
-             guess.value = "";
+            // console.log("incorrect");
+            wrongSound.play();
+            document.querySelector(".gameArea").classList.add("wrong");
+            setTimeout(() => {
+            document.querySelector(".gameArea").classList.remove("wrong");
+            }, 400);
+
             
+             msg.innerHTML = `❌ Wrong! Try again`;
+             guess.value = "";  
         }
 
     }
