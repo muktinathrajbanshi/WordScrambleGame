@@ -6,6 +6,8 @@ let newWords = "";
 let randWords = "";
 let level = 1;
 let score = 0;
+let timeLeft = 20;
+let timer;
 
 const wordsByLevel = {
   1: ["cat", "sun", "pen", "tree", "milk"],
@@ -17,13 +19,30 @@ const wordsByLevel = {
 
 const createNewWords = () => {
     const levelWords = wordsByLevel[level] || wordsByLevel[4];
-    // console.log(levelWords.length);
+    // console.log(levelWords);
     const randomNum = Math.floor(Math.random() * levelWords.length);
     // console.log(levelWords[randomNum]);
     return levelWords[randomNum];
-    
-   
 }
+
+const startTimer = () => {
+    timeLeft = Math.max(8, 20 - level * 3);
+    // console.log(timeLeft);
+    msg.innerHTML = `⏱ Time Left: ${timeLeft}s | Word: ${randWords}`;
+
+    timer = setInterval(() => {
+        timeLeft--;
+        msg.innerHTML = `⏱ Time Left: ${timeLeft}s | Word: ${randWords}`;
+
+         if (timeLeft <= 0) {
+            clearInterval(timer);
+            msg.innerHTML = "⏰ Time's up!";
+            btn.innerHTML = "Start Again";
+            play = false;
+            guess.classList.add("hidden");
+        }
+    }, 1000);
+};
 
 const scrambleWords = (arr) => {
     for (let i = arr.length - 1; i>0; i--) {
@@ -46,10 +65,13 @@ btn.addEventListener("click", function(){
         play = true;
         btn.innerHTML = "Guess";
         guess.classList.toggle("hidden");
+
         newWords = createNewWords();
         randWords = scrambleWords(newWords.split("")).join("");
-        // console.log(randWords);
-        msg.innerHTML = `Guess the Word: ${randWords}`;
+        msg.innerHTML = randWords;
+
+        clearInterval(timer);
+        startTimer();
     } else {
         let tempWord = guess.value;
         if(tempWord === newWords) {
