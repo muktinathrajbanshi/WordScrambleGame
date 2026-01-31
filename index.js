@@ -1,3 +1,6 @@
+const timeBar = document.querySelector(".timeBar span");
+let totalTime;
+
 const levelEl = document.querySelector(".level span");
 const scoreEl = document.querySelector(".score span");
 
@@ -39,6 +42,17 @@ const unlockAudio = () => {
     }
 };
 
+const applyTheme = () => {
+    const themes = {
+        1: "#00f2ff",
+        2: "#7c7cff",
+        3: "#ff4ecd",
+        4: "#00ff9c"
+    };
+
+    document.documentElement.style.setProperty("--accent", themes[level] || "#ff9f43");
+};
+
 const wordsByLevel = {
   1: ["cat", "sun", "pen", "tree", "milk"],
   2: ["planet", "friend", "window", "garden", "mirror"],
@@ -57,11 +71,15 @@ const createNewWords = () => {
 
 const startTimer = () => {
     timeLeft = Math.max(8, 20 - level * 3);
-    // console.log(timeLeft);
+    timeLeft = totalTime;
+
+    timeBar.style.width = "100%";
 
     timer = setInterval(() => {
         timeLeft--;
         btn.innerHTML = `Guess (${timeLeft}s)`;
+
+        timeBar.style.width = `${(timeLeft / totalTime) * 100}%`;
 
          if (timeLeft <= 0) {
             clearInterval(timer);
@@ -114,6 +132,7 @@ btn.addEventListener("click", function(){
 
             score++;
             if (score % 3 === 0) level++;
+            applyTheme();
 
             play = false;
             msg.innerHTML = `✅ Correct! Level: ${level} | Score: ${score}`;
