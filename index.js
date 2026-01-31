@@ -14,6 +14,9 @@ let level = 1;
 let score = 0;
 let timeLeft = 20;
 let timer;
+let maxLives = 3;
+let lives = maxLives;
+const livesEl = document.querySelector(".lives span");
 
 let highScore = localStorage.getItem("highScore") || 0;
 
@@ -122,6 +125,9 @@ btn.addEventListener("click", function(){
         randWords = scrambleWords(newWords.split("")).join("");
         msg.innerHTML = randWords;
 
+        lives = maxLives;
+        livesEl.textContent = lives;
+
         clearInterval(timer);
         startTimer();
     } else {
@@ -157,9 +163,23 @@ btn.addEventListener("click", function(){
             document.querySelector(".gameArea").classList.remove("wrong");
             }, 400);
 
-            
-             msg.innerHTML = `❌ Wrong! Try again ${randWords}`;
-             guess.value = "";  
+            lives--;
+            livesEl.textContent = lives;
+
+             msg.innerHTML = `❌ Wrong! ${randWords} | Lives left: ${lives}`;
+
+             if (lives <= 0) {
+                clearInterval(timer);
+                msg.innerHTML =`💀 Game Over! Final Score: ${score}`;
+                btn.innerHTML = "Restart Game";
+                play = false;
+                guess.classList.add("hidden");
+                lives = maxLives; 
+                livesEl.textContent = lives;
+                guess.value = "";
+             } else {
+                guess.value = "";  
+             }
         }
 
     }
