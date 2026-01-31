@@ -1,3 +1,6 @@
+const levelEl = document.querySelector(".level span");
+const scoreEl = document.querySelector(".score span");
+
 const msg = document.querySelector(".msg");
 const guess = document.querySelector("input");
 const btn = document.querySelector(".btn");
@@ -10,14 +13,31 @@ let timeLeft = 20;
 let timer;
 
 
-const correctSound = new Audio(
-    "https://assets.mixkit.co/sfx/preview/mixkit-correct-answer-tone-2870.mp3"
-);
 
-const wrongSound = new Audio(
-    "https://assets.mixkit.co/sfx/preview/mixkit-wrong-answer-fail-notification-946.mp3"
-);
 
+const correctSound = new Audio("./sounds/congratulations.mp3");
+
+const wrongSound = new Audio("./sounds/sorry.mp3");
+
+correctSound.volume = 0.8;
+wrongSound.volume = 0.8;
+
+let audioUnlocked = false;
+
+
+const unlockAudio = () => {
+    if (!audioUnlocked) {
+        correctSound.play().then(() => {
+            correctSound.pause();
+            correctSound.currentTime = 0;
+        });
+        wrongSound.play().then(() => {
+            wrongSound.pause();
+            wrongSound.currentTime = 0;
+        });
+        audioUnlocked = true;
+    }
+};
 
 const wordsByLevel = {
   1: ["cat", "sun", "pen", "tree", "milk"],
@@ -70,6 +90,9 @@ const scrambleWords = (arr) => {
 
 
 btn.addEventListener("click", function(){
+
+    unlockAudio();
+
     if(!play) {
         play = true;
         btn.innerHTML = "Guess";
@@ -94,6 +117,9 @@ btn.addEventListener("click", function(){
 
             play = false;
             msg.innerHTML = `✅ Correct! Level: ${level} | Score: ${score}`;
+            msg.innerHTML = "🎉 Correct!";
+            levelEl.textContent = level;
+            scoreEl.textContent = score;
             btn.innerHTML = "Start Again";
             guess.classList.add("hidden");
             guess.value = "";
@@ -107,7 +133,7 @@ btn.addEventListener("click", function(){
             }, 400);
 
             
-             msg.innerHTML = `❌ Wrong! Try again`;
+             msg.innerHTML = `❌ Wrong! Try again ${randWords}`;
              guess.value = "";  
         }
 
